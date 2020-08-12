@@ -140,15 +140,14 @@ export default function Home() {
             <option value="1.5">1.5</option>
             <option value="1">1</option>
           </select>
-
-          
         </div>
 
         <div className={styles.grid}>
           {teamsFiltered.map((team) => {
+            const isActive = selected.findIndex((t) => t.id === team.id) !== -1;
             return (
               <div
-                className={styles.card}
+                className={isActive ? styles.cardActive : styles.card}
                 key={team.id}
                 onClick={() => handleSelectTeam(team)}
               >
