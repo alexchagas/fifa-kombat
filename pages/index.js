@@ -7,10 +7,15 @@ const leagues = getLeagues();
 export default function Home() {
   const [selected, setSelected] = useState([]);
   const [filterLeague, setFilterLeague] = useState();
+  const [filterStar, setFilterStar] = useState();
   const [matches, setMatches] = useState([]);
 
   const handleChangeLeague = (e) => {
     setFilterLeague(e.target.value);
+  };
+
+  const handleChangeStar = (e) => {
+    setFilterStar(e.target.value ? parseFloat(e.target.value) : undefined);
   };
 
   const handleSelectTeam = (team) => {
@@ -96,17 +101,25 @@ export default function Home() {
     );
   }
 
-  const teamsFiltered = filterLeague
-    ? teams.filter((team) => team.league === filterLeague)
-    : teams;
+  const teamsFiltered =
+    filterLeague || filterStar
+      ? teams.filter((team) => {
+          const isLeagueEqual = filterLeague
+            ? team.league === filterLeague
+            : true;
+          const isStarsEqual = filterStar ? team.stars === filterStar : true;
+          return isStarsEqual && isLeagueEqual;
+        })
+      : teams;
 
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <h1 className={styles.title}>FIFA KOMBAT</h1>
         <div className={styles.filters}>
+          <span>Filtrar por:</span>
           <select onChange={handleChangeLeague}>
-            <option></option>
+            <option>Liga</option>
             {leagues &&
               leagues.map((league) => (
                 <option key={league} value={league}>
@@ -114,6 +127,21 @@ export default function Home() {
                 </option>
               ))}
           </select>
+
+          <select onChange={handleChangeStar}>
+            <option>Estrelas</option>
+            <option value="5">5</option>
+            <option value="4.5">4.5</option>
+            <option value="4">4</option>
+            <option value="3.5">3.5</option>
+            <option value="3">3</option>
+            <option value="2.5">2.5</option>
+            <option value="2">2</option>
+            <option value="1.5">1.5</option>
+            <option value="1">1</option>
+          </select>
+
+          
         </div>
 
         <div className={styles.grid}>
